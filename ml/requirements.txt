@@ -1,0 +1,21 @@
+# Core scientific computing
+numpy>=1.24
+pandas>=1.5
+scipy>=1.10
+scikit-learn>=1.2
+
+# Astronomy
+astropy>=5.0
+lightkurve>=2.4  # optional: for live MAST Kepler/TESS fetch
+
+# Deep learning
+torch>=2.0  # CPU build sufficient; GPU auto-detected if available
+
+# Backend
+fastapi>=0.100
+uvicorn[standard]>=0.22
+python-multipart>=0.0.6
+pydantic>=2.0
+
+# Report generation
+reportlab>=4.0

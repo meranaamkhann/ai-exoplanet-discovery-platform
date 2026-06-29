@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# ML artifacts (large, regenerable via train.py)
+ml/checkpoints/*/
+!ml/checkpoints/.gitkeep
+
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Database
+data/*.db
+data/cache/*
+!data/cache/.gitkeep
+
+# Logs
+*.log
+
+# OS
+.DS_Store
