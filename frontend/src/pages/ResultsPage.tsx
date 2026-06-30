@@ -1,3 +1,6 @@
+const API_BASE =
+  import.meta.env.VITE_API_URL ||
+  "https://ai-exoplanet-discovery-platform.onrender.com";
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
@@ -101,7 +104,7 @@ export default function ResultsPage() {
 
   const handleDownloadPDF = useCallback(() => {
     // Uses server-side PDF generation endpoint
-    window.open(`/api/analyses/${analysisId}/report.pdf`, '_blank');
+    window.open(`${API_BASE}/api/analyses/${analysisId}/report.pdf`, "_blank");
   }, [analysisId]);
 
   const handleExportCSV = useCallback(() => {
