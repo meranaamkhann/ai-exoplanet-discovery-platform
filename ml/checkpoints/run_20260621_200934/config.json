@@ -1,0 +1,17 @@
+{
+  "run_id": "run_20260621_200934",
+  "seed": 7,
+  "n_per_class": 1000,
+  "epochs_requested": 60,
+  "epochs_run": 47,
+  "batch_size": 32,
+  "lr": 0.001,
+  "val_frac": 0.15,
+  "test_frac": 0.15,
+  "baseline_days_range": [
+    40,
+    120
+  ],
+  "model_params": 353381,
+  "timestamp_utc": "2026-06-21T20:39:31.271402+00:00"
+}
