@@ -1,11 +1,22 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
-  Loader2, Orbit, Gauge, Ruler, Globe2, AlertTriangle,
-  Download, ChevronLeft, CheckCircle2, XCircle, Eye, Star
+  Loader2,
+  Orbit,
+  Gauge,
+  Ruler,
+  Globe2,
+  AlertTriangle,
+  Download,
+  ChevronLeft,
+  CheckCircle2,
+  XCircle,
+  Eye,
+  Star,
+  Database,
 } from 'lucide-react';
 import api from '../lib/api';
-import type { CandidateResult } from '../types/api';
+import type { CandidateResult, ModelInfo } from '../types/api';
 import CandidateCard from '../components/CandidateCard';
 import PhaseFoldChart from '../components/PhaseFoldChart';
 import { Panel, StatTile, ClassBadge, ConfidenceBar, EvidenceTag } from '../components/ui';
@@ -40,15 +51,30 @@ export default function ResultsPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [statusUpdating, setStatusUpdating] = useState(false);
-
-  useEffect(() => {
+  const [modelInfo, setModelInfo] = useState<ModelInfo| null>(null);
+ useEffect(() => {
     if (!analysisId) return;
-    api.getAnalysis(analysisId).then((d) => {
-      setData(d);
-      if (d.candidates?.length) setSelectedId(d.candidates[0].candidate_id);
+
+      Promise.all([
+      api.getAnalysis(analysisId),
+      api.modelInfo(),
+      ])
+      .then(([analysis, model]) => {
+      setData(analysis);
+      setModelInfo(model);
+
+      if (analysis.candidates?.length) {
+        setSelectedId(analysis.candidates[0].candidate_id);
+      }
+      })
+      .catch((err) => {
+      console.error(err);
+      })
+      .finally(() => {
       setLoading(false);
-    });
-  }, [analysisId]);
+      });
+
+     }, [analysisId]);
 
   const handleStatusUpdate = useCallback(async (candidateId: string, status: string) => {
     setStatusUpdating(true);
@@ -204,54 +230,106 @@ export default function ResultsPage() {
         {/* Executive Summary */}
 
 <Panel title="Final AI Assessment">
-<div className="grid grid-cols-2 gap-6">
+  <div className="grid grid-cols-3 gap-6">
 
-  <div>
+    {/* Left */}
 
-    <div className="text-3xl font-bold">
-      {selected.final_label.replace(/_/g, " ")}
+    <div>
+
+        <div className="text-[11px] uppercase tracking-wide text-[var(--color-text-tertiary)] mb-2">
+            Prediction
+        </div>
+
+        <div className="text-3xl font-bold text-[var(--color-text-primary)]">
+            {selected.final_label.replace(/_/g, ' ')}
+        </div>
+
+        <div className="mt-5">
+
+            <div className="text-[11px] text-[var(--color-text-tertiary)] mb-1">
+                Confidence
+            </div>
+
+            <ConfidenceBar
+                value={selected.final_confidence}
+                height={12}
+            />
+
+            <div className="mt-2 text-xl font-bold font-mono-nums">
+                {(selected.final_confidence * 100).toFixed(1)}%
+            </div>
+
+            <div className="text-[12px] text-[var(--color-text-secondary)]">
+                {getConfidenceLabel(selected.final_confidence)}
+            </div>
+
+        </div>
+
     </div>
 
-    <div className="mt-2">
-      Confidence
+    {/* Middle */}
+
+    <div>
+
+        <StatTile
+            label="Processing Time"
+            value={`${data.processing_time_seconds.toFixed(2)} s`}
+        />
+
+        <div className="mt-3"/>
+
+        <StatTile
+            label="Candidate Rank"
+            value={`#${selected.rank}`}
+        />
+
+        <div className="mt-3"/>
+
+        <StatTile
+            label="False Positive Risk"
+            value={
+                selected.is_likely_false_positive
+                    ? "Elevated"
+                    : "Low"
+            }
+        />
+
     </div>
 
-    <ConfidenceBar
-      value={selected.final_confidence}
-      height={12}
-    />
+    {/* Right */}
 
-    <div className="mt-2 text-xl font-semibold">
-      {(selected.final_confidence * 100).toFixed(1)}%
+    <div>
+
+        <h3 className="font-semibold text-[15px] mb-3">
+
+            Scientific Recommendation
+
+        </h3>
+
+        <p className="text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
+
+            {selected.final_confidence >= 0.90
+
+                ? "This candidate exhibits a highly significant transit signature. Recommend immediate follow-up photometric observations and independent confirmation."
+
+                : selected.final_confidence >= 0.75
+
+                ? "Promising planetary transit candidate. Additional observations are recommended to confirm the detection."
+
+                : selected.final_confidence >= 0.60
+
+                ? "Moderate confidence detection. Additional data and further validation are required."
+
+                : "Low-confidence detection. More observations are required before classification."}
+
+        </p>
+
     </div>
-
-    <div className="text-sm text-gray-400">
-      {getConfidenceLabel(selected.final_confidence)} Confidence
-    </div>
-
-  </div>
-
-  <div>
-
-    <h3 className="font-semibold mb-3">
-      Recommendation
-    </h3>
-
-    <p>
-      {selected.final_confidence >= 0.75
-        ? "Strong candidate. Recommend follow-up observations."
-        : selected.final_confidence >= 0.6
-        ? "Promising candidate requiring additional validation."
-        : "Low-confidence candidate. Further observations required."}
-    </p>
-
-  </div>
 
 </div>
 </Panel>
 
 {/* Header card */}
-<Panel></Panel>
           {/* Header card */}
           <Panel>
             <div className="flex items-start justify-between gap-4">
@@ -422,6 +500,63 @@ export default function ResultsPage() {
               ))}
             </div>
           </Panel>
+          <Panel
+    title="Model Information"
+    icon={<Database size={13} className="text-[var(--color-accent)]" />}
+>
+
+    {modelInfo ? (
+
+        <div className="grid grid-cols-4 gap-3">
+
+            <StatTile
+                label="Run ID"
+                value={modelInfo.run_id}
+            />
+
+            <StatTile
+                label="Accuracy"
+                value={`${(modelInfo.test_accuracy * 100).toFixed(1)}%`}
+            />
+
+            <StatTile
+                label="Macro F1"
+                value={modelInfo.macro_f1.toFixed(3)}
+            />
+              
+              <StatTile
+                label="Calibration"
+              value={modelInfo.calibration_temperature.toFixed(2)}
+            />
+            <StatTile
+                label="Training"
+                value={modelInfo.n_train.toLocaleString()}
+            />
+
+            <StatTile
+                label="Validation"
+                value={modelInfo.n_val.toLocaleString()}
+            />
+
+            <StatTile
+                label="Test"
+                value={modelInfo.n_test.toLocaleString()}
+            />
+              <StatTile
+                 label="Classes"
+                 value={modelInfo.class_names.length.toString()}
+            />
+        </div>
+
+    ) : (
+
+        <div className="text-sm text-[var(--color-text-tertiary)]">
+            Model information unavailable.
+        </div>
+
+    )}
+
+</Panel>
         </div>
       </div>
     </div>

@@ -35,10 +35,69 @@ export default function RealDataPage() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="h-16 flex items-center px-6 border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-panel)]/60 backdrop-blur sticky top-0 z-10">
-        <h1 className="font-[var(--font-display)] text-[18px] font-semibold">Real NASA Targets</h1>
+        <div>
+          <h1 className="font-[var(--font-display)] text-[18px] font-semibold">
+            Validation Dataset
+          </h1>
+
+          <p className="text-[11px] text-[var(--color-text-tertiary)] mt-0.5">
+            Curated NASA Kepler Objects of Interest for quantitative AI pipeline validation
+          </p>
+        </div>
       </div>
 
-      <div className="p-6 max-w-5xl">
+      <div className="p-6 max-w-7xl space-y-5">
+              <div className="grid grid-cols-4 gap-4">
+
+        <Panel>
+
+          <div className="text-[11px] uppercase tracking-wide text-[var(--color-text-tertiary)]">
+            Validated Targets
+          </div>
+
+          <div className="mt-2 text-3xl font-bold font-mono-nums text-[var(--color-accent)]">
+            {targets.length}
+          </div>
+
+        </Panel>
+
+        <Panel>
+
+          <div className="text-[11px] uppercase tracking-wide text-[var(--color-text-tertiary)]">
+            Confirmed Planets
+          </div>
+
+          <div className="mt-2 text-3xl font-bold font-mono-nums text-[var(--color-class-planet)]">
+            {targets.filter(t => t.disposition==="CONFIRMED").length}
+          </div>
+
+        </Panel>
+
+        <Panel>
+
+          <div className="text-[11px] uppercase tracking-wide text-[var(--color-text-tertiary)]">
+            False Positives
+          </div>
+
+          <div className="mt-2 text-3xl font-bold font-mono-nums text-[var(--color-class-eb)]">
+            {targets.filter(t=>t.disposition==="FALSE POSITIVE").length}
+          </div>
+
+        </Panel>
+
+        <Panel>
+
+          <div className="text-[11px] uppercase tracking-wide text-[var(--color-text-tertiary)]">
+            Candidates
+          </div>
+
+          <div className="mt-2 text-3xl font-bold font-mono-nums text-[var(--color-class-starspot)]">
+            {targets.filter(t=>t.disposition==="CANDIDATE").length}
+          </div>
+
+        </Panel>
+
+      </div>
         <div className="grid grid-cols-[1fr_320px] gap-5">
           {/* Target list */}
           <Panel title="Curated Kepler KOI Validation Set"
@@ -102,6 +161,18 @@ export default function RealDataPage() {
           <div className="space-y-4">
             {selected ? (
               <Panel title={selected.kepler_name ?? selected.kepoi_name}>
+               <div
+                className="mb-4 px-3 py-2 rounded-lg border text-[11px] font-medium"
+                style={{
+                background:"color-mix(in srgb,var(--color-class-planet) 10%,transparent)",
+                borderColor:"color-mix(in srgb,var(--color-class-planet) 30%,transparent)",
+                color:"var(--color-class-planet)"
+                }}
+                >
+
+                ✓ Official NASA Validation Target
+
+                </div>
                 <div className="space-y-3">
                   <div>
                     <div className="text-[10px] uppercase tracking-wide text-[var(--color-text-tertiary)] mb-1">Disposition</div>
@@ -113,6 +184,19 @@ export default function RealDataPage() {
                     <div className="text-[10px] uppercase tracking-wide text-[var(--color-text-tertiary)] mb-1">Vetting Notes</div>
                     <p className="text-[11.5px] text-[var(--color-text-secondary)] leading-relaxed">{selected.disposition_reason}</p>
                   </div>
+                  <div>
+                      <div className="text-[10px] uppercase tracking-wide text-[var(--color-text-tertiary)] mb-1">
+                        Scientific Importance
+                      </div>
+
+                      <p className="text-[11.5px] text-[var(--color-text-secondary)] leading-relaxed">
+                        This object is part of the curated NASA Kepler Object of Interest (KOI)
+                        validation dataset used to benchmark the AI detection pipeline against
+                        published astronomical catalogues. Its known classification provides an
+                        objective reference for evaluating model performance.
+                      </p>
+                    </div>
+                    <hr className="border-[var(--color-border-subtle)]" />
                   <div className="grid grid-cols-2 gap-2 text-[11px]">
                     {[
                       ['Orbital period', `${selected.period_days.toFixed(6)} d`],
@@ -151,6 +235,39 @@ export default function RealDataPage() {
                 with realistic Kepler-cadence noise for quantitative pipeline benchmarking.
                 Live MAST fetch is available via <span className="font-mono-nums text-[var(--color-accent)]">/api/fetch-kepler/{'{'}kic_id{'}'}</span> when internet is available.
               </p>
+            </Panel>
+              <Panel title="Validation Workflow"
+              icon={<Database size={13} className="text-[var(--color-accent)]" />}
+            >
+              <div className="space-y-2 text-[11px]">
+
+                <div>NASA KOI Archive</div>
+
+                <div className="opacity-50">↓</div>
+
+                <div>Synthetic Reconstruction</div>
+
+                <div className="opacity-50">↓</div>
+
+                <div>Light Curve Preprocessing</div>
+
+                <div className="opacity-50">↓</div>
+
+                <div>Box Least Squares Transit Search</div>
+
+                <div className="opacity-50">↓</div>
+
+                <div>Dual-View CNN Classification</div>
+
+                <div className="opacity-50">↓</div>
+
+                <div>Explainable AI</div>
+
+                <div className="opacity-50">↓</div>
+
+                <div>Scientific Report</div>
+
+              </div>
             </Panel>
           </div>
         </div>

@@ -1,7 +1,76 @@
 # ExoNova — AI-Powered Exoplanet Discovery Platform
 ### ISRO Hackathon 2026 · Problem Statement 7
 
+
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
+![React](https://img.shields.io/badge/React-TypeScript-61DAFB)
+![PyTorch](https://img.shields.io/badge/PyTorch-DeepLearning-red)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+![Status](https://img.shields.io/badge/Status-Active-success)
+
 A production-grade AI pipeline for detecting and classifying exoplanet transit signals in noisy stellar light curves.
+
+---
+
+# Overview
+
+ExoNova is an end-to-end machine learning platform that analyzes stellar light curves to identify exoplanet transit candidates.
+
+The platform combines classical astronomy algorithms with deep learning to distinguish real planetary transits from common false positives such as eclipsing binaries, stellar variability, starspot activity, and instrumental noise.
+
+Key capabilities include:
+
+- Physics-based synthetic data generation
+- Automated preprocessing and detrending
+- Box Least Squares (BLS) transit search
+- 1D CNN classification
+- Ensemble validation
+- Explainable AI using Integrated Gradients
+- FastAPI REST backend
+- React dashboard with interactive visualizations
+- Validation against curated NASA Kepler Objects of Interest
+
+---
+
+#  Why ExoNova?
+
+Traditional exoplanet detection pipelines require significant manual inspection and domain expertise. ExoNova streamlines this process by combining astronomical signal processing, deep learning, and explainable AI into a unified platform.
+
+The goal is to accelerate candidate screening while maintaining transparency through interpretable predictions.
+
+# Features
+
+## AI Detection Pipeline
+
+- Synthetic light-curve generation
+- Automated preprocessing
+- BLS transit detection
+- CNN-based classification
+- Ensemble refinement
+- Confidence calibration
+
+## Explainable AI
+
+- Integrated Gradients
+- Confidence scores
+- Prediction explanations
+- Saliency visualization
+
+## Interactive Dashboard
+
+- Upload CSV/TSV light curves
+- Demo signal generator
+- Analyze curated NASA targets
+- Prediction history
+- Interactive charts
+
+## Backend
+
+- FastAPI
+- SQLite persistence
+- OpenAPI/Swagger docs
+- REST APIs
 
 ---
 
@@ -48,6 +117,23 @@ cd ..
 └─────────────────────────────────────────────────────────────┘
 ```
 
+---
+
+# Machine Learning Pipeline
+
+1. Load stellar light curve
+2. Clean and detrend signal
+3. Normalize flux
+4. Extract transit features
+5. Perform BLS period search
+6. CNN inference
+7. Ensemble validation
+8. Confidence calibration
+9. Explain prediction
+10. Display interactive results
+
+---
+
 ## Signal Classes
 
 | Class | Description |
@@ -58,6 +144,16 @@ cd ..
 | 🌑 STARSPOT_ACTIVITY | Quasi-periodic rotational modulation, evolving amplitude |
 | 📡 INSTRUMENT_NOISE | No real periodic signal; dominated by systematics |
 
+---
+
+| Metric | Value |
+|-------|------:|
+| Accuracy | **85.6%** |
+| Macro F1 | **0.857** |
+| Parameters | **353K** |
+| Classes | **5** |
+
+---
 ## Model Performance (test set, n=750)
 
 | Class | Precision | Recall | F1 |
@@ -114,3 +210,140 @@ exoplanet-platform/
 │       └── components/     # LightCurveViewer, PhaseFoldChart, ...
 └── start.sh                # One-command launcher
 ```
+
+#  Supported Data
+
+Accepted formats:
+
+- Kepler PDC-SAP
+- TESS SPOC
+- Generic CSV
+- TSV
+
+Columns:
+
+```text
+time
+flux
+flux_err (optional)
+```
+
+---
+
+#  NASA Validation
+
+Validated on curated Kepler Objects of Interest including:
+
+- Kepler-10 b
+- Kepler-22 b
+- Kepler-62 e
+- Kepler-90 b
+- Kepler-90 i
+- Kepler-100 c
+- KOI-189.02
+- KOI-686.02
+- KOI-2700.01
+
+---
+
+#  REST API
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| /upload | POST | Upload light curve |
+| /analyze | POST | Run inference |
+| /history | GET | Prediction history |
+| /candidates | GET | Candidate list |
+| /real-targets | GET | NASA targets |
+| /health | GET | Health check |
+
+---
+
+#  Tech Stack
+
+**Frontend**
+
+- React
+- TypeScript
+- Tailwind CSS
+- Vite
+
+**Backend**
+
+- FastAPI
+- SQLite
+- Pydantic
+- Uvicorn
+
+**Machine Learning**
+
+- PyTorch
+- NumPy
+- Pandas
+- SciPy
+- Scikit-learn
+
+---
+
+#  Requirements
+
+- Python 3.11+
+- Node.js 20+
+- npm 10+
+
+##  Highlights
+
+- End-to-end AI-powered exoplanet detection platform
+- 17,500+ synthetic training light curves
+- 353K-parameter 1D CNN
+- 85.6% test accuracy
+- Explainable AI with Integrated Gradients
+- FastAPI REST backend
+- React + TypeScript dashboard
+- NASA Kepler validation
+
+#  Roadmap
+
+- Docker support
+- CI/CD
+- Cloud deployment
+- Transformer models
+- Multi-planet detection
+- User authentication
+- Batch inference
+- Kubernetes
+
+---
+
+#  Contributing
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Commit changes.
+4. Push your branch.
+5. Open a Pull Request.
+
+---
+
+## Future Work
+
+Future improvements include support for transformer-based architectures, cloud-native deployment, automated retraining pipelines, multi-planet detection, and integration with live astronomical observation streams.
+
+---
+
+#  License
+
+MIT License.
+
+---
+
+#  Author
+
+**Asad Khan**
+
+- GitHub: https://github.com/meranaamkhann
+- LinkedIn: https://www.linkedin.com/in/meranaamkhann/
+
+---
+
+If you found this project useful, consider starring the repository.
