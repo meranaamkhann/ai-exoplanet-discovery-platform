@@ -4,7 +4,12 @@ import type {
   HistoryResponse, RealTargetInfo, ModelInfo, HealthResponse, CandidateResult,
 } from '../types/api';
 
-const client = axios.create({ baseURL: '/api', timeout: 180_000 });
+const client = axios.create({
+  baseURL:
+    import.meta.env.VITE_API_URL ||
+    "https://ai-exoplanet-discovery-platform.onrender.com",
+  timeout: 180000,
+});
 
 // Structured error messages
 client.interceptors.response.use(
