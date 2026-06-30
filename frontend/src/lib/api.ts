@@ -6,8 +6,8 @@ import type {
 
 const client = axios.create({
   baseURL:
-    import.meta.env.VITE_API_URL ||
-    "https://ai-exoplanet-discovery-platform.onrender.com",
+    (import.meta.env.VITE_API_URL ||
+    "https://ai-exoplanet-discovery-platform.onrender.com") + "/api",
   timeout: 180000,
 });
 
