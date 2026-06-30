@@ -117,8 +117,15 @@ class DetectionPipeline:
             if len(time) < 30:
                 break
             try:
+                print("\n========== BEFORE run_bls ==========")
+                print("Flux min    :", np.min(working_flux))
+                print("Flux max    :", np.max(working_flux))
+                print("Flux median :", np.median(working_flux))
+                print("====================================\n")
+
                 bls = fe.run_bls(time, working_flux, flux_err)
-            except Exception:
+            except Exception as e:
+                print("BLS ERROR:", e)
                 break
             if bls.snr < 3.0 and i > 0:
                 break  # stop searching once signal is indistinguishable from noise

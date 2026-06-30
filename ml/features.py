@@ -104,6 +104,15 @@ class FeatureExtractor:
         depth_err = result.depth_err[best_idx] if hasattr(result, "depth_err") else depth * 0.1
         power = result.power[best_idx]
 
+        print("\n========== BLS DEBUG ==========")
+        print("Flux min :", np.min(flux))
+        print("Flux max :", np.max(flux))
+        print("Flux median :", np.median(flux))
+        print("BLS depth :", depth)
+        print("BLS power :", power)
+        print("BLS duration :", best_duration)
+        print("===============================\n")
+
         # NOTE on period aliasing: BLS can lock onto either P or a sub-multiple of P (commonly
         # P/2) depending on noise/gaps/duty cycle, and a simple "prefer the shorter period if its
         # power is comparably strong" heuristic is NOT reliable — it cannot distinguish "true

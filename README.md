@@ -87,7 +87,7 @@ python3 train.py --n-per-class 600 --epochs 40
 # 3. Start both services
 cd ..
 ./start.sh
-# Backend:  http://localhost:8000
+# Backend:  http://localhost:8000/api
 # Frontend: http://localhost:5173
 # API docs: http://localhost:8000/docs
 ```
@@ -98,17 +98,17 @@ cd ..
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     React Dashboard (port 5173)              │
+│                     React Dashboard (port 5173)             │
 │  Upload CSV │ Demo Generator │ Real KOI Targets │ Results   │
 └────────────────────────┬────────────────────────────────────┘
                          │ /api/* (Vite proxy)
 ┌────────────────────────▼────────────────────────────────────┐
-│                   FastAPI Backend (port 8000)                │
+│                   FastAPI Backend (port 8000)               │
 │  /upload  /analyze  /history  /candidates  /real-targets    │
 └────────────────────────┬────────────────────────────────────┘
                          │
 ┌────────────────────────▼────────────────────────────────────┐
-│                   Detection Pipeline                         │
+│                   Detection Pipeline                        │
 │  1. Clean/detrend   →   preprocessing.py                    │
 │  2. BLS search      →   features.py                         │
 │  3. CNN classify    →   model_cnn.py (353K params)          │

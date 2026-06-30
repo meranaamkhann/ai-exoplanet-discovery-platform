@@ -181,6 +181,11 @@ class LightCurvePreprocessor:
         win_points = max(win_points, 5)
 
         trend = self._rolling_percentile(flux, win_points, percentile=75)
+        print("\n===== ROLLING PERCENTILE =====")
+        print("Trend min   :", np.min(trend))
+        print("Trend max   :", np.max(trend))
+        print("Trend median:", np.median(trend))
+        print("==============================\n")
 
         # light smoothing of the trend itself to avoid step artifacts from the percentile filter
         try:
