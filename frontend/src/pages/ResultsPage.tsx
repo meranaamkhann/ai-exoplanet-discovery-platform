@@ -105,7 +105,7 @@ export default function ResultsPage() {
   const handleDownloadPDF = useCallback(() => {
     // Uses server-side PDF generation endpoint
     window.open(`${API_BASE}/api/analyses/${analysisId}/report.pdf`, "_blank");
-  }, [analysisId]);
+  }, [analysisId, API_BASE]);
 
   const handleExportCSV = useCallback(() => {
     if (!data?.candidates) return;
